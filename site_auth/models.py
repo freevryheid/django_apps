@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractUser
-# from django.contrib.auth.models import AbstractUser, UserManager
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.conf import settings
@@ -9,14 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class CustomUserManager(BaseUserManager):
-# class CustomUserManager(UserManager):
-    # def create_user(self, username, **kwargs):
-    #     return super(CustomUserManager, self).create_user(self, username, **kwargs)
-
-    # def create_superuser(self, username, **kwargs):
-    #     return super(CustomUserManager, self).create_superuser(self, username, **kwargs)
-
-
     """
     Custom user model manager where email is the unique identifiers
     for authentication instead of usernames.
@@ -49,21 +40,6 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    # site = models.ForeignKey(Site, default=settings.SITE_ID, on_delete=models.CASCADE)
-
-    # USERNAME_FIELD = 'username'
-    # REQUIRED_FIELDS = []
-
-    # default_manager = CustomUserManager()
-    # on_site = CurrentSiteManager()
-
-    # class Meta:
-    #     unique_together = ('site', 'email')
-
-
-
-
-    # username = None
     email = models.EmailField(_('email address'), unique=False)
     site = models.ForeignKey(Site, default=settings.SITE_ID, on_delete=models.CASCADE)
 
@@ -88,51 +64,22 @@ def compose_username(sender, instance, **kwargs):
     instance.username = "{0}__{1}".format( instance.email, site_id )
     instance.site = Site.objects.get_current()
 
-# from django.contrib.auth.backends import ModelBackend
-# from django.contrib.auth import get_user_model
 
-
-# class MyModelBackend(ModelBackend):
-
-#     def authenticate(self, username=None, password=None, **kwargs):
-#         UserModel = get_user_model()
-#         site = kwargs.get('site', settings.SITE_ID)
-#         identifier = "{0}__{1}".format( username, site )
-
-#         try:
-#             user = UserModel.objects.get(username=identifier)
-
-#             if user.check_password(password):
-#                 return user
-
-#         except UserModel.DoesNotExist:
-#             UserModel().set_password(password)
-
-#         return None
-
-
-# from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.backends import ModelBackend
-# from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 
 
-# class SiteBackend(BaseBackend):
 class SiteBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
         UserModel = get_user_model()
         site = kwargs.get('site', settings.SITE_ID)
         identifier = "{0}__{1}".format( username, site )
-
         try:
             user = UserModel.objects.get(username=identifier)
-
             if user.check_password(password):
                 return user
-
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
-
         return None
 
 from django.contrib.auth.models import Group
@@ -143,7 +90,6 @@ class CustomGroup(Group):
         proxy = True
         verbose_name = 'group'
 
-# from django.contrib.auth.models import Site
 
 class CustomSite(Site):
 
