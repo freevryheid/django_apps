@@ -2,3 +2,5 @@ site_auth/__pycache__
 site_auth/migrations
 cert/__pycache__
 mat/__pycache__
+cert
+mat
