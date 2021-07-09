@@ -23,6 +23,21 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('email',)
 
 
+# class ForeignKeyFilter(object):
+#     def formfield_for_dbfield(self, db_field, **kwargs):
+#         # Only show the foreign key objects from the rendered filter.
+#         filters = getattr(self, 'foreignkey_filters', None)
+#         if filters and db_field.name in filters:
+#             kwargs['queryset'] = filters[db_field.name](Site.objects.get_current())
+#         return admin.ModelAdmin.formfield_for_dbfield(self, db_field, **kwargs)
+
+
+# class SiteOnlyAdmin(ForeignKeyFilter, admin.ModelAdmin):
+#     foreignkey_filters = {
+#       'site' : lambda site : Site.objects.filter(name=site.name)
+#     }
+
+
 admin.site.unregister(Group)
 admin.site.unregister(Site)
 admin.site.register(CustomUser, CustomUserAdmin)

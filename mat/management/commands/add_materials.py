@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
 from mat.models import MaterialApplication, MaterialCategory, MaterialSupplier
+from django.conf import settings
+from django.contrib.sites.models import Site
 
 class Command(BaseCommand):
   args = '<foo bar ...>'
@@ -87,12 +89,12 @@ class Command(BaseCommand):
     ]
 
     for sup in material_supplier:
-      s = MaterialSupplier(supplier=sup)
+      sup = 'Site_' + str(settings.SITE_ID) + '_' + sup
+      s = MaterialSupplier(supplier=sup, site=Site.objects.get_current())
       s.save()
 
   def handle(self, *args, **options):
-    # self.add_material_categories()
-    # self.add_material_applications()
+    self.add_material_categories()
+    self.add_material_applications()
     self.add_material_suppliers()
-
 

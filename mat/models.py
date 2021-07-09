@@ -1,5 +1,8 @@
+from django.contrib.sites.models import Site
+from django.contrib.sites.managers import CurrentSiteManager
 from django.db import models
-
+# from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 class MaterialCategory(models.Model):
   category = models.CharField(max_length=128)
@@ -19,6 +22,9 @@ class MaterialApplication(models.Model):
 
 class MaterialSupplier(models.Model):
   supplier = models.CharField(max_length=128)
+  site = models.ForeignKey(Site, default=Site.objects.get_current().id, on_delete=models.CASCADE)
+  objects = models.Manager()
+  on_site = CurrentSiteManager()
 
   def __str__(self):
     return self.supplier
@@ -30,6 +36,9 @@ class Material(models.Model):
   application = models.ForeignKey(MaterialApplication, on_delete=models.CASCADE)
   supplier = models.ForeignKey(MaterialSupplier, on_delete=models.CASCADE)
   description = models.CharField(max_length=128)
+  site = models.ForeignKey(Site, default=Site.objects.get_current().id, on_delete=models.CASCADE)
+  objects = models.Manager()
+  on_site = CurrentSiteManager()
 
   def __str__(self):
     return self.code

@@ -4,3 +4,5 @@ cert/__pycache__
 cert/migrations
 mat/__pycache__
 mat/migrations
+mat/management/__pycache__
+mat/management/commands/__pycache__
