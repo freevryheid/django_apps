@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class CertConfig(AppConfig):
+class MatConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'mat'
     verbose_name = 'Material definition'
